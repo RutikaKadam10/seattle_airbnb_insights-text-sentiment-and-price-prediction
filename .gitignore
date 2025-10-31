@@ -9,4 +9,9 @@ wheels/
 # Virtual environments
 .venv
 
-.gitignore
+data/
+nltk_data/
+code/nltk_data/
+*.zip
+*.tsv
+*.csv
