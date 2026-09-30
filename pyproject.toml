@@ -1,7 +1,7 @@
 [project]
 name = "airbnb-seattle"
 version = "0.1.0"
-description = "Add your description here"
+description = "EDA, sentiment analysis and regression modelling of Seattle Airbnb listing prices"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [

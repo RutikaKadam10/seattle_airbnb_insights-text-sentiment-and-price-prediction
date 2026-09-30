@@ -15,3 +15,6 @@ code/nltk_data/
 *.zip
 *.tsv
 *.csv
+
+# Model training artifacts
+catboost_info/
