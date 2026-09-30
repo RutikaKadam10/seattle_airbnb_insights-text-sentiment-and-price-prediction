@@ -10,10 +10,10 @@ The analysis is organised around one question, broken into three sub-problems, f
 
 | Notebook | Question |
 |----------|----------|
-| `Exploratory Analysis Problem 1.ipynb` | Which **property features and amenities** affect price? (room type, property type, bedrooms, amenities) |
-| `Exploratory Analysis Problem 2.ipynb` | Are there **locations/neighbourhoods** in Seattle where listings fetch higher prices? |
-| `Exploratory Analysis Problem 3.ipynb` | Do the **listing summary text and review sentiment** affect price? |
-| `Machine Learning Models.ipynb` | Can we **predict price** from the factors identified in the EDA? |
+| `01_exploratory_data_analysis.ipynb` | Which **property features and amenities** affect price? (room type, property type, bedrooms, amenities) |
+| `02_exploratory_data_analysis.ipynb` | Are there **locations/neighbourhoods** in Seattle where listings fetch higher prices? |
+| `03_exploratory_data_analysis.ipynb` | Do the **listing summary text and review sentiment** affect price? |
+| `machine_learning.ipynb` | Can we **predict price** from the factors identified in the EDA? |
 
 ---
 
@@ -34,15 +34,17 @@ The analysis is organised around one question, broken into three sub-problems, f
 
 | Model | Test R² (80/20 split) | Test MSE (80/20 split) | 10-fold CV R² | 10-fold CV MSE |
 |-------|------|------|------|------|
-| Linear Regression | 0.519 | 4135 | 0.496 | 4098 |
-| Ridge Regression | 0.519 | 4135 | 0.459 | 4470 |
-| Lasso Regression | 0.519 | 4135 | 0.472 | 4332 |
-| Random Forest | 0.526 | 4075 | **0.519** | **3953** |
-| XGBoost | 0.563 | 3761 | 0.497 | 4035 |
-| CatBoost | **0.582** | **3597** | 0.499 | 4011 |
+| Linear Regression | 0.525 | 3855 | 0.496 | 4098 |
+| Ridge Regression | 0.525 | 3855 | 0.459 | 4470 |
+| Lasso Regression | 0.525 | 3854 | 0.472 | 4332 |
+| Random Forest | **0.531** | **3807** | **0.519** | **3953** |
+| XGBoost | 0.502 | 4039 | 0.494 | 4059 |
+| CatBoost | 0.470 | 4301 | 0.499 | 4011 |
 
-- On the single train/test split the boosted models scored highest, with **CatBoost** best.
-- **10-fold cross-validation** is the more reliable comparison because it doesn't depend on one random split. Under CV, **Random Forest** performs best (R² ≈ 0.52, MSE ≈ 3953), so it was used for the feature-importance and TreeInterpreter analysis.
+*Train/test split uses `random_state=42`; cross-validation uses `KFold(n_splits=10, shuffle=True, random_state=100)`.*
+
+- **Random Forest** performs best on both the held-out test set and 10-fold cross-validation, so it was used for the feature-importance and TreeInterpreter analysis.
+- **XGBoost and CatBoost overfit.** They reach R² ≈ 0.68–0.69 on the training set but fall to 0.47–0.50 on unseen data.
 - R² of about 0.5 shows that these structural features explain roughly half of the price variation. The rest likely comes from factors not modeled here, such as exact location, seasonality, listing quality and host pricing strategy.
 
 ---
@@ -70,10 +72,10 @@ The analysis is organised around one question, broken into three sub-problems, f
 Airbnb_Seattle/
 │
 ├── code/                                   # Jupyter notebooks (run from this folder)
-│   ├── Exploratory Analysis Problem 1.ipynb
-│   ├── Exploratory Analysis Problem 2.ipynb
-│   ├── Exploratory Analysis Problem 3.ipynb
-│   └── Machine Learning Models.ipynb
+│   ├── 01_exploratory_data_analysis.ipynb
+│   ├── 02_exploratory_data_analysis.ipynb
+│   ├── 03_exploratory_data_analysis.ipynb
+│   └── machine_learning.ipynb
 ├── data/                                   # Dataset CSVs (not tracked in git, see below)
 │   └── data_columns.txt                    # Column descriptions
 ├── pyproject.toml / uv.lock                # Dependencies (uv)
@@ -86,7 +88,7 @@ Airbnb_Seattle/
 ## 🚀 Getting Started
 
 1. **Get the data.** Download the [Seattle Airbnb Open Data](https://www.kaggle.com/datasets/airbnb/seattle) from Kaggle and place `listings.csv`, `reviews.csv` and `calendar.csv` in the `data/` folder.
-2. **Install dependencies**, using either
+2. **Install dependencies.** The tree visualization in the modeling notebook also needs the [Graphviz](https://graphviz.org/download/) system package (`brew install graphviz` on macOS). Then install the Python packages using either
    ```bash
    uv sync
    ```
@@ -94,7 +96,7 @@ Airbnb_Seattle/
    ```bash
    pip install -r requirements.txt
    ```
-3. **Run the notebooks** from inside the `code/` folder. They read data from `../data/`. The NLTK resources are downloaded automatically into `code/nltk_data/` on first run, and Problem 3 writes `polarity_reviews.csv` there.
+3. **Run the notebooks** from inside the `code/` folder. They read data from `../data/`. The NLTK resources are downloaded automatically into `code/nltk_data/` on first run, and notebook 03 writes `polarity_reviews.csv` there.
 
 ---
 
